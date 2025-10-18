@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>USDT Trading Portal - Mohammad</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --bg-card: #1e2749;
+            --accent: #00d4aa;
+            --accent-hover: #00b894;
+            --accent-light: rgba(0, 212, 170, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --text-muted: #718096;
+            --border: #2d3748;
+            --border-light: #4a5568;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --error: #f56565;
+            --info: #4299e1;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-accent: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            --gradient-success: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            --gradient-warning: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            --gradient-error: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Mobile-first header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .greeting-text h1 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .greeting-text p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 44px; /* Touch-friendly */
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--border-light);
+        }
+
+        .btn-icon {
+            padding: 0.75rem;
+            border-radius: 50%;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        /* Mobile-first navigation */
+        nav {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+            min-width: max-content;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .nav-tab.active {
+            background: var(--bg-primary);
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .content {
+            padding: 1.5rem 0;
+        }
+
+        /* Mobile-first filters */
+        .filters {
+            background: var(--bg-card);
+            padding: 1.25rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            min-height: 44px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        /* Mobile-first KPI grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
+        .kpi-card.profit::before {
+            background: var(--gradient-success);
+        }
+
+        .kpi-card.buys::before {
+            background: var(--gradient-primary);
+        }
+
+        .kpi-card.sells::before {
+            background: var(--gradient-warning);
+        }
+
+        .kpi-card.avg::before {
+            background: var(--gradient-error);
+        }
+
+        .kpi-card.method::before {
+            background: var(--gradient-accent);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .kpi-card.profit .kpi-icon {
+            background: var(--accent-light);
+            color: var(--success);
+        }
+
+        .kpi-card.buys .kpi-icon {
+            background: rgba(66, 153, 225, 0.1);
+            color: var(--info);
+        }
+
+        .kpi-card.sells .kpi-icon {
+            background: rgba(237, 137, 54, 0.1);
+            color: var(--warning);
+        }
+
+        .kpi-card.avg .kpi-icon {
+            background: rgba(245, 101, 101, 0.1);
+            color: var(--error);
+        }
+
+        .kpi-card.method .kpi-icon {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .kpi-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .kpi-change {
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .kpi-change.positive {
+            color: var(--success);
+        }
+
+        .kpi-change.negative {
+            color: var(--error);
+        }
+
+        /* Mobile-first chart grid */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Mobile-first form cards */
+        .form-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.75rem;
+            background: var(--accent-light);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .form-title {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Mobile-first table cards */
+        .table-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-tertiary);
+        }
+
+        .table-title {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        thead {
+            background: var(--bg-tertiary);
+        }
+
+        th,
+        td {
+            padding: 1rem 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        tbody tr:hover {
+            background: var(--accent-light);
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-profit {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .text-loss {
+            color: var(--error);
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(72, 187, 120, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(237, 137, 54, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-error {
+            background: rgba(245, 101, 101, 0.1);
+            color: var(--error);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile responsiveness */
+        @media (min-width: 640px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .filters-row {
+                flex-direction: row;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .chart-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .kpi-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .kpi-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .chart-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 0.75rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .user-greeting {
+                width: 100%;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .nav-tabs {
+                padding: 0 0.75rem;
+            }
+            
+            .nav-tab {
+                padding: 0.875rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .kpi-value {
+                font-size: 1.75rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+            
+            .form-card,
+            .chart-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="user-greeting">
+                    <div class="user-avatar">M</div>
+                    <div class="greeting-text">
+                        <h1>Hi, Mohammad! 👋</h1>
+                        <p>Welcome to your USDT Trading Portal</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary btn-icon" onclick="exportCSV()" title="Export Data">
+                        📥
+                    </button>
+                    <button class="btn-secondary btn-icon" onclick="refreshData()" title="Refresh">
+                        🔄
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchView('dashboard')">
+                    📊 Dashboard
+                </button>
+                <button class="nav-tab" onclick="switchView('buyLog')">
+                    💰 Buy Log
+                </button>
+                <button class="nav-tab" onclick="switchView('sellLog')">
+                    💸 Sell Log
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container content">
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="searchInput">Search Transactions</label>
+                    <input type="text" id="searchInput" placeholder="Search by method or date..." oninput="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label for="dateFilter">Time Period</label>
+                    <select id="dateFilter" onchange="applyFilters()">
+                        <option value="all">All Time</option>
+                        <option value="last7">Last 7 Days</option>
+                        <option value="last30">Last 30 Days</option>
+                        <option value="last90">Last 90 Days</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboardView">
+            <div class="kpi-grid">
+                <div class="kpi-card profit">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">💰</div>
+                    </div>
+                    <div class="kpi-label">Total Profit</div>
+                    <div class="kpi-value" id="kpiProfit">0.00 JOD</div>
+                    <div class="kpi-change positive" id="kpiProfitChange">+0.00%</div>
+                </div>
+                <div class="kpi-card buys">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">📈</div>
+                    </div>
+                    <div class="kpi-label">Total Buys</div>
+                    <div class="kpi-value" id="kpiBuys">0</div>
+                    <div class="kpi-change" id="kpiBuysChange">0 this month</div>
+                </div>
+                <div class="kpi-card sells">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">📉</div>
+                    </div>
+                    <div class="kpi-label">Total Sells</div>
+                    <div class="kpi-value" id="kpiSells">0</div>
+                    <div class="kpi-change" id="kpiSellsChange">0 this month</div>
+                </div>
+                <div class="kpi-card avg">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">📊</div>
+                    </div>
+                    <div class="kpi-label">Avg Daily Profit</div>
+                    <div class="kpi-value" id="kpiAvg">0.00 JOD</div>
+                    <div class="kpi-change" id="kpiAvgChange">Last 30 days</div>
+                </div>
+                <div class="kpi-card method">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">🏦</div>
+                    </div>
+                    <div class="kpi-label">Most Used Method</div>
+                    <div class="kpi-value" id="kpiMethod">N/A</div>
+                    <div class="kpi-change" id="kpiMethodChange">Payment method</div>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">📈 Daily Profit Trend</h3>
+                        <div class="chart-actions">
+                            <button class="btn-secondary btn-icon" onclick="toggleChartType('daily')" title="Toggle Chart Type">
+                                🔄
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">📊 Weekly Performance</h3>
+                        <div class="chart-actions">
+                            <button class="btn-secondary btn-icon" onclick="toggleChartType('weekly')" title="Toggle Chart Type">
+                                🔄
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">💰 Cumulative Growth</h3>
+                        <div class="chart-actions">
+                            <button class="btn-secondary btn-icon" onclick="toggleChartType('cumulative')" title="Toggle Chart Type">
+                                🔄
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="cumulativeChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">🏦 Payment Methods</h3>
+                        <div class="chart-actions">
+                            <button class="btn-secondary btn-icon" onclick="toggleChartType('method')" title="Toggle Chart Type">
+                                🔄
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="methodChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buy Log View -->
+        <div id="buyLogView" class="hidden">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">💰</div>
+                    <h2 class="form-title">Add Buy Transaction</h2>
+                </div>
+                <form class="form-grid" onsubmit="addBuy(event)">
+                    <div class="form-group">
+                        <label for="buyDate">Transaction Date</label>
+                        <input type="date" id="buyDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyMethod">Payment Method</label>
+                        <select id="buyMethod" onchange="toggleBankField('buy')">
+                            <option>Cliq</option>
+                            <option>Orange Money</option>
+                            <option>Zain Cash</option>
+                            <option>Bank</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="buyBankGroup">
+                        <label for="buyBankName">Bank Name</label>
+                        <select id="buyBankName">
+                            <option value="">Select Bank</option>
+                            <option>Etihad Bank</option>
+                            <option>Arab Bank</option>
+                            <option>Islamic Arab Bank</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyAmount">Amount (USDT)</label>
+                        <input type="number" id="buyAmount" placeholder="Enter USDT amount" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyPrice">Buy Price (JOD/USDT)</label>
+                        <input type="number" id="buyPrice" placeholder="Enter buy price" step="0.0001" min="0.52" max="0.92" value="0.720" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyTransferCost">Transfer Cost (JOD)</label>
+                        <input type="number" id="buyTransferCost" placeholder="Enter transfer cost" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn-primary">➕ Add Buy Transaction</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">📈 Buy Transactions</h3>
+                </div>
+                <div class="table-container">
+                    <table id="buyTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Method</th>
+                                <th class="text-right">Amount (USDT)</th>
+                                <th class="text-right">Price (JOD/USDT)</th>
+                                <th class="text-right">Value (JOD)</th>
+                                <th class="text-right">Fee (0.2%)</th>
+                                <th class="text-right">Net After Fee</th>
+                                <th class="text-right">Transfer Cost</th>
+                                <th class="text-right">Net (JOD)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="buyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sell Log View -->
+        <div id="sellLogView" class="hidden">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">💸</div>
+                    <h2 class="form-title">Add Sell Transaction</h2>
+                </div>
+                <form class="form-grid" onsubmit="addSell(event)">
+                    <div class="form-group">
+                        <label for="sellDate">Transaction Date</label>
+                        <input type="date" id="sellDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellMethod">Payment Method</label>
+                        <select id="sellMethod" onchange="toggleBankField('sell')">
+                            <option>Cliq</option>
+                            <option>Orange Money</option>
+                            <option>Zain Cash</option>
+                            <option>Bank</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="sellBankGroup">
+                        <label for="sellBankName">Bank Name</label>
+                        <select id="sellBankName">
+                            <option value="">Select Bank</option>
+                            <option>Etihad Bank</option>
+                            <option>Arab Bank</option>
+                            <option>Islamic Arab Bank</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellAmount">Amount (USDT)</label>
+                        <input type="number" id="sellAmount" placeholder="Enter USDT amount" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellPrice">Sell Price (JOD/USDT)</label>
+                        <input type="number" id="sellPrice" placeholder="Enter sell price" step="0.0001" min="0.52" max="0.92" value="0.725" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellManualBuyPrice">Original Buy Price (JOD/USDT)</label>
+                        <input type="number" id="sellManualBuyPrice" placeholder="Enter original buy price" step="0.0001" min="0.52" max="0.92" value="0.720" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellTransferCost">Transfer Cost (JOD)</label>
+                        <input type="number" id="sellTransferCost" placeholder="Enter transfer cost" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn-primary">➕ Add Sell Transaction</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">📉 Sell Transactions</h3>
+                </div>
+                <div class="table-container">
+                    <table id="sellTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Method</th>
+                                <th class="text-right">Amount (USDT)</th>
+                                <th class="text-right">Sell Price</th>
+                                <th class="text-right">Buy Price</th>
+                                <th class="text-right">Value (JOD)</th>
+                                <th class="text-right">Fee (0.2%)</th>
+                                <th class="text-right">Net After Fee</th>
+                                <th class="text-right">Transfer Cost</th>
+                                <th class="text-right">Net (JOD)</th>
+                                <th class="text-right">Profit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sellTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Local Storage Management
+        const STORAGE_KEY = 'usdt_trading_data';
+        
+        // Load data from localStorage or use default
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            return {
+                buys: [],
+                sells: []
+            };
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // Initialize data
+        let data = loadData();
+
+        const FEE_RATE = 0.002;
+        let charts = {};
+
+        // Toggle bank name field
+        function toggleBankField(type) {
+            const method = document.getElementById(type + 'Method').value;
+            const bankField = document.getElementById(type + 'BankName');
+            const bankGroup = document.getElementById(type + 'BankGroup');
+            
+            if (method === 'Bank') {
+                bankGroup.classList.remove('hidden');
+                bankField.required = true;
+            } else {
+                bankGroup.classList.add('hidden');
+                bankField.required = false;
+                bankField.value = '';
+            }
+        }
+
+        // Refresh data function
+        function refreshData() {
+            updateAll();
+            showNotification('Data refreshed successfully!', 'success');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--bg-card);
+                color: var(--text-primary);
+                padding: 1rem 1.5rem;
+                border-radius: 0.75rem;
+                box-shadow: var(--shadow-lg);
+                border: 1px solid var(--border);
+                z-index: 1000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Toggle chart type
+        function toggleChartType(chartType) {
+            // This function can be expanded to toggle between different chart types
+            showNotification(`${chartType} chart type toggled`, 'info');
+        }
+
+        // Calculate metrics
+        function calculateMetrics(amount, price, transferCost = 0) {
+            const value = amount * price;
+            const fee = value * FEE_RATE;
+            const netAfterFee = value - fee;
+            const net = netAfterFee - transferCost;
+            return { value, fee, netAfterFee, net };
+        }
+
+        function calculateProfit(sell) {
+            const sellMetrics = calculateMetrics(sell.amount, sell.sellPrice, sell.transferCost);
+            const buyMetrics = calculateMetrics(sell.amount, sell.manualBuyPrice, 0);
+            return sellMetrics.net - buyMetrics.value;
+        }
+
+        // Filter data
+        function getFilteredData() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const dateFilter = document.getElementById('dateFilter').value;
+            const now = new Date();
+            let startDate = new Date('2000-01-01');
+
+            if (dateFilter === 'last7') {
+                startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            } else if (dateFilter === 'last30') {
+                startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            } else if (dateFilter === 'last90') {
+                startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+            }
+
+            const filterItem = (item) => {
+                const itemDate = new Date(item.date);
+                const matchesDate = itemDate >= startDate;
+                const matchesSearch = !searchTerm || 
+                    item.method.toLowerCase().includes(searchTerm) || 
+                    item.date.includes(searchTerm) ||
+                    (item.bankName && item.bankName.toLowerCase().includes(searchTerm));
+                return matchesDate && matchesSearch;
+            };
+
+            return {
+                buys: data.buys.filter(filterItem),
+                sells: data.sells.filter(filterItem)
+            };
+        }
+
+        // Update KPIs
+        function updateKPIs() {
+            const { buys, sells } = getFilteredData();
+            
+            const totalProfit = sells.reduce((sum, sell) => sum + calculateProfit(sell), 0);
+            const allMethods = [...buys.map(b => b.method), ...sells.map(s => s.method)];
+            const methodCounts = {};
+            allMethods.forEach(m => methodCounts[m] = (methodCounts[m] || 0) + 1);
+            const mostUsed = Object.keys(methodCounts).reduce((a, b) => 
+                methodCounts[a] > methodCounts[b] ? a : b, 'N/A');
+            const uniqueDates = new Set(sells.map(s => s.date));
+            const avgDaily = uniqueDates.size > 0 ? totalProfit / uniqueDates.size : 0;
+
+            // Calculate monthly stats
+            const now = new Date();
+            const thisMonth = now.getMonth();
+            const thisYear = now.getFullYear();
+            
+            const thisMonthBuys = buys.filter(b => {
+                const buyDate = new Date(b.date);
+                return buyDate.getMonth() === thisMonth && buyDate.getFullYear() === thisYear;
+            }).length;
+            
+            const thisMonthSells = sells.filter(s => {
+                const sellDate = new Date(s.date);
+                return sellDate.getMonth() === thisMonth && sellDate.getFullYear() === thisYear;
+            }).length;
+
+            // Update KPI values
+            document.getElementById('kpiProfit').textContent = totalProfit.toFixed(2) + ' JOD';
+            document.getElementById('kpiBuys').textContent = buys.length;
+            document.getElementById('kpiSells').textContent = sells.length;
+            document.getElementById('kpiAvg').textContent = avgDaily.toFixed(2) + ' JOD';
+            document.getElementById('kpiMethod').textContent = mostUsed;
+
+            // Update KPI change indicators
+            document.getElementById('kpiProfitChange').textContent = totalProfit >= 0 ? `+${totalProfit.toFixed(2)} JOD` : `${totalProfit.toFixed(2)} JOD`;
+            document.getElementById('kpiProfitChange').className = `kpi-change ${totalProfit >= 0 ? 'positive' : 'negative'}`;
+            
+            document.getElementById('kpiBuysChange').textContent = `${thisMonthBuys} this month`;
+            document.getElementById('kpiSellsChange').textContent = `${thisMonthSells} this month`;
+            document.getElementById('kpiAvgChange').textContent = 'Last 30 days';
+            document.getElementById('kpiMethodChange').textContent = 'Payment method';
+        }
+
+        // Update charts
+        function updateCharts() {
+            const { sells } = getFilteredData();
+
+            // Daily profit data
+            const dailyData = {};
+            sells.forEach(sell => {
+                const profit = calculateProfit(sell);
+                if (!dailyData[sell.date]) dailyData[sell.date] = 0;
+                dailyData[sell.date] += profit;
+            });
+            const dailyLabels = Object.keys(dailyData).sort();
+            const dailyValues = dailyLabels.map(d => dailyData[d].toFixed(2));
+
+            // Weekly profit data
+            const weeklyData = {};
+            dailyLabels.forEach(dateStr => {
+                const date = new Date(dateStr);
+                const weekStart = new Date(date);
+                weekStart.setDate(date.getDate() - date.getDay());
+                const weekKey = weekStart.toISOString().split('T')[0];
+                if (!weeklyData[weekKey]) weeklyData[weekKey] = 0;
+                weeklyData[weekKey] += parseFloat(dailyData[dateStr]);
+            });
+            const weeklyLabels = Object.keys(weeklyData).sort();
+            const weeklyValues = weeklyLabels.map(w => weeklyData[w].toFixed(2));
+
+            // Cumulative data
+            let cumulative = 0;
+            const cumulativeValues = dailyValues.map(v => {
+                cumulative += parseFloat(v);
+                return cumulative.toFixed(2);
+            });
+
+            // Method usage
+            const methods = {};
+            [...getFilteredData().buys, ...sells].forEach(item => {
+                methods[item.method] = (methods[item.method] || 0) + 1;
+            });
+
+            // Update Daily Chart
+            if (charts.daily) charts.daily.destroy();
+            charts.daily = new Chart(document.getElementById('dailyChart'), {
+                type: 'line',
+                data: {
+                    labels: dailyLabels,
+                    datasets: [{
+                        label: 'Profit (JOD)',
+                        data: dailyValues,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#f3f4f6' } } },
+                    scales: {
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                    }
+                }
+            });
+
+            // Update Weekly Chart
+            if (charts.weekly) charts.weekly.destroy();
+            charts.weekly = new Chart(document.getElementById('weeklyChart'), {
+                type: 'bar',
+                data: {
+                    labels: weeklyLabels,
+                    datasets: [{
+                        label: 'Profit (JOD)',
+                        data: weeklyValues,
+                        backgroundColor: '#3b82f6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#f3f4f6' } } },
+                    scales: {
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                    }
+                }
+            });
+
+            // Update Cumulative Chart
+            if (charts.cumulative) charts.cumulative.destroy();
+            charts.cumulative = new Chart(document.getElementById('cumulativeChart'), {
+                type: 'line',
+                data: {
+                    labels: dailyLabels,
+                    datasets: [{
+                        label: 'Cumulative (JOD)',
+                        data: cumulativeValues,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.3)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#f3f4f6' } } },
+                    scales: {
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                    }
+                }
+            });
+
+            // Update Method Chart
+            if (charts.method) charts.method.destroy();
+            charts.method = new Chart(document.getElementById('methodChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(methods),
+                    datasets: [{
+                        data: Object.values(methods),
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#f3f4f6' } } }
+                }
+            });
+        }
+
+        // Update tables
+        function updateTables() {
+            const { buys, sells } = getFilteredData();
+
+            // Buy table
+            const buyTableBody = document.getElementById('buyTableBody');
+            buyTableBody.innerHTML = '';
+            buys.forEach(buy => {
+                const metrics = calculateMetrics(buy.amount, buy.buyPrice, buy.transferCost);
+                const row = `
+                    <tr>
+                        <td>${buy.date}</td>
+                        <td>${buy.method}</td>
+                        <td class="text-right">${buy.amount.toFixed(2)}</td>
+                        <td class="text-right">${buy.buyPrice.toFixed(4)}</td>
+                        <td class="text-right">${metrics.value.toFixed(3)}</td>
+                        <td class="text-right">${metrics.fee.toFixed(3)}</td>
+                        <td class="text-right">${metrics.netAfterFee.toFixed(3)}</td>
+                        <td class="text-right">${buy.transferCost.toFixed(2)}</td>
+                        <td class="text-right"><strong>${metrics.net.toFixed(3)}</strong></td>
+                    </tr>
+                `;
+                buyTableBody.innerHTML += row;
+            });
+
+            // Sell table
+            const sellTableBody = document.getElementById('sellTableBody');
+            sellTableBody.innerHTML = '';
+            let totalProfit = 0;
+            
+            sells.forEach(sell => {
+                const metrics = calculateMetrics(sell.amount, sell.sellPrice, sell.transferCost);
+                const profit = calculateProfit(sell);
+                totalProfit += profit;
+                const profitClass = profit >= 0 ? 'text-profit' : 'text-loss';
+                const row = `
+                    <tr>
+                        <td>${sell.date}</td>
+                        <td>${sell.method}</td>
+                        <td class="text-right">${sell.amount.toFixed(2)}</td>
+                        <td class="text-right">${sell.sellPrice.toFixed(4)}</td>
+                        <td class="text-right">${sell.manualBuyPrice.toFixed(4)}</td>
+                        <td class="text-right">${metrics.value.toFixed(3)}</td>
+                        <td class="text-right">${metrics.fee.toFixed(3)}</td>
+                        <td class="text-right">${metrics.netAfterFee.toFixed(3)}</td>
+                        <td class="text-right">${sell.transferCost.toFixed(2)}</td>
+                        <td class="text-right"><strong>${metrics.net.toFixed(3)}</strong></td>
+                        <td class="text-right ${profitClass}">${profit.toFixed(3)}</td>
+                    </tr>
+                `;
+                sellTableBody.innerHTML += row;
+            });
+
+            // Add total profit row if there are sell transactions
+            if (sells.length > 0) {
+                const totalProfitClass = totalProfit >= 0 ? 'text-profit' : 'text-loss';
+                const totalRow = `
+                    <tr style="background: var(--bg-tertiary); border-top: 2px solid var(--border);">
+                        <td colspan="10" class="text-right" style="font-weight: 600; font-size: 0.9rem;">Total Profit:</td>
+                        <td class="text-right ${totalProfitClass}" style="font-weight: 700; font-size: 1rem;">${totalProfit.toFixed(3)} JOD</td>
+                    </tr>
+                `;
+                sellTableBody.innerHTML += totalRow;
+            }
+        }
+
+        // Switch views
+        function switchView(view) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            
+            // Find and activate the clicked tab
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach((tab, index) => {
+                const views = ['dashboard', 'buyLog', 'sellLog'];
+                if (views[index] === view) {
+                    tab.classList.add('active');
+                }
+            });
+
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('buyLogView').classList.add('hidden');
+            document.getElementById('sellLogView').classList.add('hidden');
+
+            if (view === 'dashboard') {
+                document.getElementById('dashboardView').classList.remove('hidden');
+                updateCharts();
+            } else if (view === 'buyLog') {
+                document.getElementById('buyLogView').classList.remove('hidden');
+            } else if (view === 'sellLog') {
+                document.getElementById('sellLogView').classList.remove('hidden');
+            }
+        }
+
+        // Add buy transaction
+        function addBuy(event) {
+            event.preventDefault();
+            const method = document.getElementById('buyMethod').value;
+            const bankName = method === 'Bank' ? document.getElementById('buyBankName').value : '';
+            
+            const newBuy = {
+                id: Date.now(),
+                date: document.getElementById('buyDate').value,
+                method: method,
+                bankName: bankName,
+                amount: parseFloat(document.getElementById('buyAmount').value),
+                buyPrice: parseFloat(document.getElementById('buyPrice').value),
+                transferCost: parseFloat(document.getElementById('buyTransferCost').value) || 0
+            };
+            
+            data.buys.push(newBuy);
+            saveData();
+            
+            event.target.reset();
+            document.getElementById('buyDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('buyPrice').value = '0.720';
+            document.getElementById('buyTransferCost').value = '0';
+            document.getElementById('buyBankGroup').classList.add('hidden');
+            
+            updateAll();
+            showNotification('Buy transaction added successfully!', 'success');
+        }
+
+        // Add sell transaction
+        function addSell(event) {
+            event.preventDefault();
+            const method = document.getElementById('sellMethod').value;
+            const bankName = method === 'Bank' ? document.getElementById('sellBankName').value : '';
+            
+            const newSell = {
+                id: Date.now(),
+                date: document.getElementById('sellDate').value,
+                method: method,
+                bankName: bankName,
+                amount: parseFloat(document.getElementById('sellAmount').value),
+                sellPrice: parseFloat(document.getElementById('sellPrice').value),
+                manualBuyPrice: parseFloat(document.getElementById('sellManualBuyPrice').value),
+                transferCost: parseFloat(document.getElementById('sellTransferCost').value) || 0
+            };
+            
+            data.sells.push(newSell);
+            saveData();
+            
+            event.target.reset();
+            document.getElementById('sellDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('sellPrice').value = '0.725';
+            document.getElementById('sellManualBuyPrice').value = '0.720';
+            document.getElementById('sellTransferCost').value = '0';
+            document.getElementById('sellBankGroup').classList.add('hidden');
+            
+            updateAll();
+            showNotification('Sell transaction added successfully!', 'success');
+        }
+
+        // Export to CSV
+        function exportCSV() {
+            const { buys, sells } = getFilteredData();
+            let csv = 'Type,Date,Method,Bank Name,Amount (USDT),Price (JOD/USDT),Transfer Cost (JOD),Value (JOD),Fee (JOD),Net After Fee (JOD),Net (JOD),Profit (JOD)\n';
+            
+            buys.forEach(buy => {
+                const metrics = calculateMetrics(buy.amount, buy.buyPrice, buy.transferCost);
+                csv += `Buy,${buy.date},${buy.method},${buy.bankName || ''},${buy.amount},${buy.buyPrice},${buy.transferCost},${metrics.value.toFixed(3)},${metrics.fee.toFixed(3)},${metrics.netAfterFee.toFixed(3)},${metrics.net.toFixed(3)},\n`;
+            });
+            
+            sells.forEach(sell => {
+                const metrics = calculateMetrics(sell.amount, sell.sellPrice, sell.transferCost);
+                const profit = calculateProfit(sell);
+                csv += `Sell,${sell.date},${sell.method},${sell.bankName || ''},${sell.amount},${sell.sellPrice},${sell.transferCost},${metrics.value.toFixed(3)},${metrics.fee.toFixed(3)},${metrics.netAfterFee.toFixed(3)},${metrics.net.toFixed(3)},${profit.toFixed(3)}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `usdt_trading_data_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('Data exported successfully!', 'success');
+        }
+
+        // Apply filters
+        function applyFilters() {
+            updateAll();
+        }
+
+        // Update all components
+        function updateAll() {
+            updateKPIs();
+            updateTables();
+            if (!document.getElementById('dashboardView').classList.contains('hidden')) {
+                updateCharts();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date for forms
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('buyDate').value = today;
+            document.getElementById('sellDate').value = today;
+            
+            // Initialize the app
+            updateAll();
+            
+            // Show welcome message
+            setTimeout(() => {
+                showNotification('Welcome to your USDT Trading Portal, Mohammad! 🚀', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
