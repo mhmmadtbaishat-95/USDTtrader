@@ -595,7 +595,7 @@
             .chart-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .form-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -643,7 +643,7 @@
                 padding: 0.875rem 1rem;
                 font-size: 0.875rem;
             }
-            
+
             .kpi-value {
                 font-size: 1.75rem;
             }
@@ -708,12 +708,12 @@
                 </div>
                 <div class="filter-group">
                     <label for="dateFilter">Time Period</label>
-                    <select id="dateFilter" onchange="applyFilters()">
-                        <option value="all">All Time</option>
-                        <option value="last7">Last 7 Days</option>
-                        <option value="last30">Last 30 Days</option>
+            <select id="dateFilter" onchange="applyFilters()">
+                <option value="all">All Time</option>
+                <option value="last7">Last 7 Days</option>
+                <option value="last30">Last 30 Days</option>
                         <option value="last90">Last 90 Days</option>
-                    </select>
+            </select>
                 </div>
             </div>
         </div>
@@ -829,34 +829,37 @@
                 <form class="form-grid" onsubmit="addBuy(event)">
                     <div class="form-group">
                         <label for="buyDate">Transaction Date</label>
-                        <input type="date" id="buyDate" required>
+                    <input type="date" id="buyDate" required>
                     </div>
                     <div class="form-group">
                         <label for="buyMethod">Payment Method</label>
-                        <select id="buyMethod" onchange="toggleBankField('buy')">
-                            <option>Cliq</option>
-                            <option>Orange Money</option>
-                            <option>Zain Cash</option>
-                            <option>Bank</option>
-                            <option>Other</option>
-                        </select>
+                    <select id="buyMethod" onchange="toggleBankField('buy')">
+                        <option>Cliq</option>
+                        <option>Orange Money</option>
+                        <option>Zain Cash</option>
+                        <option>Bank</option>
+                        <option>Other</option>
+                    </select>
                     </div>
                     <div class="form-group hidden" id="buyBankGroup">
                         <label for="buyBankName">Bank Name</label>
                         <select id="buyBankName">
-                            <option value="">Select Bank</option>
-                            <option>Etihad Bank</option>
-                            <option>Arab Bank</option>
-                            <option>Islamic Arab Bank</option>
-                        </select>
+                        <option value="">Select Bank</option>
+                        <option>Etihad Bank</option>
+                        <option>Arab Bank</option>
+                        <option>Islamic Arab Bank</option>
+                    </select>
                     </div>
                     <div class="form-group">
-                        <label for="buyAmount">Amount (USDT)</label>
-                        <input type="number" id="buyAmount" placeholder="Enter USDT amount" step="0.01" required>
+                        <label for="buyAmount">Amount (JOD)</label>
+                        <input type="number" id="buyAmount" placeholder="Enter JOD amount" step="0.01" required oninput="calculateBuyUSDT()">
+                        <div id="buyUSDTDisplay" class="usdt-display" style="margin-top: 0.5rem; padding: 0.5rem; background: var(--accent-light); border-radius: 0.5rem; font-size: 0.875rem; color: var(--accent); display: none;">
+                            <strong>USDT Amount: <span id="buyUSDTAmount">0.00</span></strong>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="buyPrice">Buy Price (JOD/USDT)</label>
-                        <input type="number" id="buyPrice" placeholder="Enter buy price" step="0.0001" min="0.52" max="0.92" value="0.720" required>
+                        <input type="number" id="buyPrice" placeholder="Enter buy price" step="0.0001" min="0.52" max="0.92" value="0.720" required oninput="calculateBuyUSDT()">
                     </div>
                     <div class="form-group">
                         <label for="buyTransferCost">Transfer Cost (JOD)</label>
@@ -878,9 +881,9 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Method</th>
-                                <th class="text-right">Amount (USDT)</th>
+                                <th class="text-right">Amount (JOD)</th>
                                 <th class="text-right">Price (JOD/USDT)</th>
-                                <th class="text-right">Value (JOD)</th>
+                                <th class="text-right">USDT Amount</th>
                                 <th class="text-right">Fee (0.2%)</th>
                                 <th class="text-right">Net After Fee</th>
                                 <th class="text-right">Transfer Cost</th>
@@ -903,34 +906,37 @@
                 <form class="form-grid" onsubmit="addSell(event)">
                     <div class="form-group">
                         <label for="sellDate">Transaction Date</label>
-                        <input type="date" id="sellDate" required>
+                    <input type="date" id="sellDate" required>
                     </div>
                     <div class="form-group">
                         <label for="sellMethod">Payment Method</label>
-                        <select id="sellMethod" onchange="toggleBankField('sell')">
-                            <option>Cliq</option>
-                            <option>Orange Money</option>
-                            <option>Zain Cash</option>
-                            <option>Bank</option>
-                            <option>Other</option>
-                        </select>
+                    <select id="sellMethod" onchange="toggleBankField('sell')">
+                        <option>Cliq</option>
+                        <option>Orange Money</option>
+                        <option>Zain Cash</option>
+                        <option>Bank</option>
+                        <option>Other</option>
+                    </select>
                     </div>
                     <div class="form-group hidden" id="sellBankGroup">
                         <label for="sellBankName">Bank Name</label>
                         <select id="sellBankName">
-                            <option value="">Select Bank</option>
-                            <option>Etihad Bank</option>
-                            <option>Arab Bank</option>
-                            <option>Islamic Arab Bank</option>
-                        </select>
+                        <option value="">Select Bank</option>
+                        <option>Etihad Bank</option>
+                        <option>Arab Bank</option>
+                        <option>Islamic Arab Bank</option>
+                    </select>
                     </div>
                     <div class="form-group">
-                        <label for="sellAmount">Amount (USDT)</label>
-                        <input type="number" id="sellAmount" placeholder="Enter USDT amount" step="0.01" required>
+                        <label for="sellAmount">Amount (JOD)</label>
+                        <input type="number" id="sellAmount" placeholder="Enter JOD amount" step="0.01" required oninput="calculateSellUSDT()">
+                        <div id="sellUSDTDisplay" class="usdt-display" style="margin-top: 0.5rem; padding: 0.5rem; background: var(--accent-light); border-radius: 0.5rem; font-size: 0.875rem; color: var(--accent); display: none;">
+                            <strong>USDT Amount: <span id="sellUSDTAmount">0.00</span></strong>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="sellPrice">Sell Price (JOD/USDT)</label>
-                        <input type="number" id="sellPrice" placeholder="Enter sell price" step="0.0001" min="0.52" max="0.92" value="0.725" required>
+                        <input type="number" id="sellPrice" placeholder="Enter sell price" step="0.0001" min="0.52" max="0.92" value="0.725" required oninput="calculateSellUSDT()">
                     </div>
                     <div class="form-group">
                         <label for="sellManualBuyPrice">Original Buy Price (JOD/USDT)</label>
@@ -956,10 +962,10 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Method</th>
-                                <th class="text-right">Amount (USDT)</th>
+                                <th class="text-right">Amount (JOD)</th>
                                 <th class="text-right">Sell Price</th>
                                 <th class="text-right">Buy Price</th>
-                                <th class="text-right">Value (JOD)</th>
+                                <th class="text-right">USDT Amount</th>
                                 <th class="text-right">Fee (0.2%)</th>
                                 <th class="text-right">Net After Fee</th>
                                 <th class="text-right">Transfer Cost</th>
@@ -1066,19 +1072,59 @@
             showNotification(`${chartType} chart type toggled`, 'info');
         }
 
-        // Calculate metrics
-        function calculateMetrics(amount, price, transferCost = 0) {
-            const value = amount * price;
-            const fee = value * FEE_RATE;
-            const netAfterFee = value - fee;
+        // Calculate and display USDT amount for buy transactions
+        function calculateBuyUSDT() {
+            const jodAmount = parseFloat(document.getElementById('buyAmount').value) || 0;
+            const price = parseFloat(document.getElementById('buyPrice').value) || 0;
+            const usdtDisplay = document.getElementById('buyUSDTDisplay');
+            const usdtAmount = document.getElementById('buyUSDTAmount');
+            
+            if (jodAmount > 0 && price > 0) {
+                const usdtValue = jodAmount / price;
+                usdtAmount.textContent = usdtValue.toFixed(3);
+                usdtDisplay.style.display = 'block';
+            } else {
+                usdtDisplay.style.display = 'none';
+            }
+        }
+
+        // Calculate and display USDT amount for sell transactions
+        function calculateSellUSDT() {
+            const jodAmount = parseFloat(document.getElementById('sellAmount').value) || 0;
+            const price = parseFloat(document.getElementById('sellPrice').value) || 0;
+            const usdtDisplay = document.getElementById('sellUSDTDisplay');
+            const usdtAmount = document.getElementById('sellUSDTAmount');
+            
+            if (jodAmount > 0 && price > 0) {
+                const usdtValue = jodAmount / price;
+                usdtAmount.textContent = usdtValue.toFixed(3);
+                usdtDisplay.style.display = 'block';
+            } else {
+                usdtDisplay.style.display = 'none';
+            }
+        }
+
+        // Calculate metrics for JOD-based system
+        function calculateMetrics(jodAmount, price, transferCost = 0) {
+            const usdtAmount = jodAmount / price; // Convert JOD to USDT
+            const fee = jodAmount * FEE_RATE; // Fee is on JOD amount
+            const netAfterFee = jodAmount - fee;
             const net = netAfterFee - transferCost;
-            return { value, fee, netAfterFee, net };
+            return { jodAmount, usdtAmount, fee, netAfterFee, net };
         }
 
         function calculateProfit(sell) {
-            const sellMetrics = calculateMetrics(sell.amount, sell.sellPrice, sell.transferCost);
-            const buyMetrics = calculateMetrics(sell.amount, sell.manualBuyPrice, 0);
-            return sellMetrics.net - buyMetrics.value;
+            // For sell transactions, we need to account for the total 0.4% fee
+            // (0.2% on buy + 0.2% on sell)
+            const sellMetrics = calculateMetrics(sell.jodAmount, sell.sellPrice, sell.transferCost);
+            const buyMetrics = calculateMetrics(sell.jodAmount, sell.manualBuyPrice, 0);
+            
+            // Calculate the effective USDT amount after total fees (0.4%)
+            const totalFeeRate = 0.004; // 0.4% total fee
+            const effectiveUsdtAmount = sellMetrics.usdtAmount * (1 - totalFeeRate);
+            const effectiveJodValue = effectiveUsdtAmount * sell.manualBuyPrice;
+            
+            return sellMetrics.net - effectiveJodValue;
         }
 
         // Filter data
@@ -1298,14 +1344,14 @@
             const buyTableBody = document.getElementById('buyTableBody');
             buyTableBody.innerHTML = '';
             buys.forEach(buy => {
-                const metrics = calculateMetrics(buy.amount, buy.buyPrice, buy.transferCost);
+                const metrics = calculateMetrics(buy.jodAmount, buy.buyPrice, buy.transferCost);
                 const row = `
                     <tr>
                         <td>${buy.date}</td>
                         <td>${buy.method}</td>
-                        <td class="text-right">${buy.amount.toFixed(2)}</td>
+                        <td class="text-right">${buy.jodAmount.toFixed(2)}</td>
                         <td class="text-right">${buy.buyPrice.toFixed(4)}</td>
-                        <td class="text-right">${metrics.value.toFixed(3)}</td>
+                        <td class="text-right">${metrics.usdtAmount.toFixed(3)}</td>
                         <td class="text-right">${metrics.fee.toFixed(3)}</td>
                         <td class="text-right">${metrics.netAfterFee.toFixed(3)}</td>
                         <td class="text-right">${buy.transferCost.toFixed(2)}</td>
@@ -1321,7 +1367,7 @@
             let totalProfit = 0;
             
             sells.forEach(sell => {
-                const metrics = calculateMetrics(sell.amount, sell.sellPrice, sell.transferCost);
+                const metrics = calculateMetrics(sell.jodAmount, sell.sellPrice, sell.transferCost);
                 const profit = calculateProfit(sell);
                 totalProfit += profit;
                 const profitClass = profit >= 0 ? 'text-profit' : 'text-loss';
@@ -1329,10 +1375,10 @@
                     <tr>
                         <td>${sell.date}</td>
                         <td>${sell.method}</td>
-                        <td class="text-right">${sell.amount.toFixed(2)}</td>
+                        <td class="text-right">${sell.jodAmount.toFixed(2)}</td>
                         <td class="text-right">${sell.sellPrice.toFixed(4)}</td>
                         <td class="text-right">${sell.manualBuyPrice.toFixed(4)}</td>
-                        <td class="text-right">${metrics.value.toFixed(3)}</td>
+                        <td class="text-right">${metrics.usdtAmount.toFixed(3)}</td>
                         <td class="text-right">${metrics.fee.toFixed(3)}</td>
                         <td class="text-right">${metrics.netAfterFee.toFixed(3)}</td>
                         <td class="text-right">${sell.transferCost.toFixed(2)}</td>
@@ -1394,7 +1440,7 @@
                 date: document.getElementById('buyDate').value,
                 method: method,
                 bankName: bankName,
-                amount: parseFloat(document.getElementById('buyAmount').value),
+                jodAmount: parseFloat(document.getElementById('buyAmount').value),
                 buyPrice: parseFloat(document.getElementById('buyPrice').value),
                 transferCost: parseFloat(document.getElementById('buyTransferCost').value) || 0
             };
@@ -1407,6 +1453,7 @@
             document.getElementById('buyPrice').value = '0.720';
             document.getElementById('buyTransferCost').value = '0';
             document.getElementById('buyBankGroup').classList.add('hidden');
+            document.getElementById('buyUSDTDisplay').style.display = 'none';
             
             updateAll();
             showNotification('Buy transaction added successfully!', 'success');
@@ -1423,7 +1470,7 @@
                 date: document.getElementById('sellDate').value,
                 method: method,
                 bankName: bankName,
-                amount: parseFloat(document.getElementById('sellAmount').value),
+                jodAmount: parseFloat(document.getElementById('sellAmount').value),
                 sellPrice: parseFloat(document.getElementById('sellPrice').value),
                 manualBuyPrice: parseFloat(document.getElementById('sellManualBuyPrice').value),
                 transferCost: parseFloat(document.getElementById('sellTransferCost').value) || 0
@@ -1438,6 +1485,7 @@
             document.getElementById('sellManualBuyPrice').value = '0.720';
             document.getElementById('sellTransferCost').value = '0';
             document.getElementById('sellBankGroup').classList.add('hidden');
+            document.getElementById('sellUSDTDisplay').style.display = 'none';
             
             updateAll();
             showNotification('Sell transaction added successfully!', 'success');
@@ -1446,17 +1494,17 @@
         // Export to CSV
         function exportCSV() {
             const { buys, sells } = getFilteredData();
-            let csv = 'Type,Date,Method,Bank Name,Amount (USDT),Price (JOD/USDT),Transfer Cost (JOD),Value (JOD),Fee (JOD),Net After Fee (JOD),Net (JOD),Profit (JOD)\n';
+            let csv = 'Type,Date,Method,Bank Name,Amount (JOD),Price (JOD/USDT),USDT Amount,Fee (JOD),Net After Fee (JOD),Transfer Cost (JOD),Net (JOD),Profit (JOD)\n';
             
             buys.forEach(buy => {
-                const metrics = calculateMetrics(buy.amount, buy.buyPrice, buy.transferCost);
-                csv += `Buy,${buy.date},${buy.method},${buy.bankName || ''},${buy.amount},${buy.buyPrice},${buy.transferCost},${metrics.value.toFixed(3)},${metrics.fee.toFixed(3)},${metrics.netAfterFee.toFixed(3)},${metrics.net.toFixed(3)},\n`;
+                const metrics = calculateMetrics(buy.jodAmount, buy.buyPrice, buy.transferCost);
+                csv += `Buy,${buy.date},${buy.method},${buy.bankName || ''},${buy.jodAmount},${buy.buyPrice},${metrics.usdtAmount.toFixed(3)},${metrics.fee.toFixed(3)},${metrics.netAfterFee.toFixed(3)},${buy.transferCost},${metrics.net.toFixed(3)},\n`;
             });
             
             sells.forEach(sell => {
-                const metrics = calculateMetrics(sell.amount, sell.sellPrice, sell.transferCost);
+                const metrics = calculateMetrics(sell.jodAmount, sell.sellPrice, sell.transferCost);
                 const profit = calculateProfit(sell);
-                csv += `Sell,${sell.date},${sell.method},${sell.bankName || ''},${sell.amount},${sell.sellPrice},${sell.transferCost},${metrics.value.toFixed(3)},${metrics.fee.toFixed(3)},${metrics.netAfterFee.toFixed(3)},${metrics.net.toFixed(3)},${profit.toFixed(3)}\n`;
+                csv += `Sell,${sell.date},${sell.method},${sell.bankName || ''},${sell.jodAmount},${sell.sellPrice},${metrics.usdtAmount.toFixed(3)},${metrics.fee.toFixed(3)},${metrics.netAfterFee.toFixed(3)},${sell.transferCost},${metrics.net.toFixed(3)},${profit.toFixed(3)}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -1492,7 +1540,7 @@
             document.getElementById('sellDate').value = today;
             
             // Initialize the app
-            updateAll();
+        updateAll();
             
             // Show welcome message
             setTimeout(() => {
