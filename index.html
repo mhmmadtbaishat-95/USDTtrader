@@ -249,6 +249,14 @@
             font-size: 0.875rem;
             transition: all 0.2s ease;
             min-height: 44px;
+            box-sizing: border-box;
+        }
+
+        /* Fix date picker width on mobile */
+        input[type="date"] {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         input:focus,
@@ -643,7 +651,7 @@
                 padding: 0.875rem 1rem;
                 font-size: 0.875rem;
             }
-
+            
             .kpi-value {
                 font-size: 1.75rem;
             }
@@ -655,6 +663,30 @@
             .form-card,
             .chart-card {
                 padding: 1rem;
+            }
+            
+            /* Fix date picker on mobile */
+            input[type="date"] {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                font-size: 0.875rem;
+                padding: 0.75rem 0.875rem;
+            }
+            
+            .form-group {
+                width: 100%;
+                min-width: 0;
+            }
+            
+            .filters-row {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .filter-group {
+                min-width: 0;
+                width: 100%;
             }
         }
     </style>
@@ -1114,17 +1146,21 @@
         }
 
         function calculateProfit(sell) {
-            // For sell transactions, we need to account for the total 0.4% fee
-            // (0.2% on buy + 0.2% on sell)
-            const sellMetrics = calculateMetrics(sell.jodAmount, sell.sellPrice, sell.transferCost);
-            const buyMetrics = calculateMetrics(sell.jodAmount, sell.manualBuyPrice, 0);
+            // Calculate profit based on the actual trading logic
+            // You buy JOD amount worth of USDT, then sell that USDT
+            // Profit = (Sell JOD - Buy JOD) after fees
             
-            // Calculate the effective USDT amount after total fees (0.4%)
+            const buyUsdtAmount = sell.jodAmount / sell.manualBuyPrice; // USDT received when buying
+            const sellJodAmount = buyUsdtAmount * sell.sellPrice; // JOD received when selling USDT
+            
+            // Apply 0.4% total fee (0.2% on buy + 0.2% on sell) to the sell amount
             const totalFeeRate = 0.004; // 0.4% total fee
-            const effectiveUsdtAmount = sellMetrics.usdtAmount * (1 - totalFeeRate);
-            const effectiveJodValue = effectiveUsdtAmount * sell.manualBuyPrice;
+            const effectiveSellJodAmount = sellJodAmount * (1 - totalFeeRate);
             
-            return sellMetrics.net - effectiveJodValue;
+            // Calculate profit in JOD
+            const profitJod = effectiveSellJodAmount - sell.jodAmount;
+            
+            return profitJod;
         }
 
         // Filter data
